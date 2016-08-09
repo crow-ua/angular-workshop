@@ -1,0 +1,124 @@
+<section class="mainbar">
+    <div class="container-fluid">
+        <div class="clearfix">
+            <h1>
+                Team
+                <form class="form-inline pull-right">
+                    <select name="" id="" class="form-control" ng-model="vmTeam.memberFilter">
+                        <option value="">All members</option>
+                        <option value="admin">Admin</option>
+                        <option value="normal">Normal</option>
+                        <option value="ghost">Ghost</option>
+                        <option value="true">Confirmed</option>
+                        <option value="false">Unconfirmed</option>
+                    </select>
+                    <input type="text" class="form-control" placeholder="Search for..." ng-model="vmTeam.query">
+                </form>
+            </h1>
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-12">
+
+                <!--add user form-->
+                <form class="form-inline" name="teamForm" ng-submit="vmTeam.addUser(teamForm.$valid);" novalidate>
+                    <div class="form-group">
+                        <label for="new-member-name" hidden>Name</label>
+                        <input
+                            type        ="text"
+                            class       ="form-control"
+                            id          ="new-member-name"
+                            name        ="name"
+                            placeholder ="Full name"
+                            ng-model    ="vmTeam.newName"
+                            ng-minlength="2"
+                            ng-maxlength="20"
+                            required>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="new-member-email" hidden>Email</label>
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="new-member-email"
+                            name="email"
+                            placeholder="Email"
+                            ng-model="vmTeam.newEmail"
+                            ng-minlength="5"
+                            ng-maxlength="30"
+                            required>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="new-member-permissions" hidden>Permissions</label>
+                        <select
+                            class="form-control"
+                            id="new-member-permissions"
+                            ng-model="vmTeam.newRole"
+                            required>
+
+                            <option value="admin">Admin</option>
+                            <option value="normal">Normal</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" type="submit" ng-disabled="teamForm.$invalid">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        Add
+                    </button>
+                    <button class="btn btn-primary" type="button" ng-click="vmTeam.getUsers(vmTeam.users);"><i
+                        class="glyphicon glyphicon-refresh"></i>
+                    </button>
+
+                    <!-- form validation messages-->
+                    <div ng-messages="teamForm.name.$error">
+                        <p ng-message="minlength" class="alert alert-warning">The name is too short</p>
+                        <p ng-message="maxlength" class="alert alert-warning">The name is too long</p>
+                    </div>
+                    <div ng-messages="teamForm.email.$error">
+                        <p ng-message="minlength" class="alert alert-warning">The email is too short</p>
+                        <p ng-message="maxlength" class="alert alert-warning">The email is too long</p>
+                    </div>
+                </form>
+
+                <br/>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        Members
+                    </div>
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Confirmed</th>
+                            <th>Url</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="user in vmTeam.users | filter:vmTeam.query | filter:vmTeam.memberFilter | orderBy:fullName" style="cursor: pointer;">
+                            <td>
+                                <img ng-src="{{user.avatarImgUrl}}" width="20"/>
+                                <span class="h6">{{ user.fullName; }}</span>
+                            </td>
+                            <td>{{user.username}}</td>
+                            <td>{{user.memberType}}</td>
+                            <td>{{user.confirmed}}</td>
+                            <td>
+                                <a ng-href="{{user.url}}">{{user.url}}</a>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger" ng-click="vmTeam.deleteUser(vmTeam.users, $index);"><i
+                                    class="glyphicon glyphicon-trash"></i></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,41 @@
+<header class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="btn btn-default navbar-btn navbar-left" ng-click="vmNav.sidebar.sidebarToggle(vmNav.sidebar.visible)">
+                <span class="fa fa-bars"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                {{vmNav.navline.text}}
+            </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-class="vmNav.isCurrent('/')"><a href="/dashboard">Dashboard</a></li>
+                <li ng-class="vmNav.isCurrent('/tests/list')"><a href="/tests/list">Tests</a></li>
+                <li ng-class="vmNav.isCurrent('/runs/list')"><a href="/runs/list">Runs</a></li>
+                <li ng-class="vmNav.isCurrent('/defects/list')"><a href="/defects/list">Defects</a></li>
+                <li ng-class="vmNav.isCurrent('/reports')"><a href="/reports">Reports</a></li>
+                <li class="dropdown" uib-dropdown>
+                    <a href="#" class="dropdown-toggle" uib-dropdown-toggle>
+                        {{vmNav.user.currentProject.name}} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a ui-sref="admin.team">Manage Team</a></li>
+                        <li><a ui-sref="admin.time">Manage Time</a></li>
+                        <li><a ui-sref="admin.project">Manage Project</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" uib-dropdown>
+                    <a href="#" class="dropdown-toggle" uib-dropdown-toggle>
+                        <img class="img-circle" height="23px" src="https://avatars0.githubusercontent.com/u/5695572?v=3&amp;s=60"/>
+                        {{vmNav.user.fullName}}  <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a ui-sref="profile">Profile</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="" ng-click="vmNav.logOut()">Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</header>

@@ -1,0 +1,20 @@
+branches:
+  only:
+    - master
+language: node_js
+node_js:
+  - "4.1"
+cache:
+  directories:
+  - TCMSApp/node_modules
+  - TCMSApp/bower_components
+before_script:
+  - cd TCMSApp/
+  - npm install codecov.io
+  - npm install -b bower
+  - npm install -g gulp
+  - npm install
+script: 
+  - gulp test
+after_script:
+  - cat ./report/coverage/report-lcov/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js

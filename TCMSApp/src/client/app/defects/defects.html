@@ -1,0 +1,159 @@
+<section class="mainbar">
+    <div class="matter">
+        <div class="container-fluid">
+            <div class="clearfix">
+                <form class="form-inline pull-right well">
+                    <select class="form-control">
+                        <option>Show all:</option>
+                        <option>Show Opened</option>
+                        <option>Show Closed</option>
+                    </select>
+                    <select class="form-control">
+                        <option>Sort by:</option>
+                        <option>ID</option>
+                        <option>Priority</option>
+                        <option>Date</option>
+                    </select>
+
+                    <div class="form-group">
+                        <smart-filter type="defects"
+                                      fast-queries="['priority=High', 'priority=Low', 'priority=Normal', 'priority=Critical']">
+                        </smart-filter>
+                        <!-- /input-group -->
+                    </div>
+                </form>
+                <h1>Defects
+                    <button type="button" class="btn btn-success btn-xs" ui-sref="add-defect({ previousState: vmDefects.previousState })">Add Defect</button>
+
+                </h1>
+
+            </div>
+            <hr>
+
+            <div class="row" ng-if="vmDefects.currentDefect">
+                <div class="col-sm-8">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            Defects list
+                            <span class="pull-right">
+                                <span class="glyphicon glyphicon-inbox"></span>
+                                archive
+                            </span>
+                        </div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" ng-click = "vmDefects.toogledAll = !vmDefects.toogledAll">
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Date
+                                </th>
+                                <th>
+                                    Priority
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+                            </thead>
+                            <tbody ng-repeat="defect in vmDefects.arrayDefects|smartFilter:filterQuery:vmDefects.filterFields">
+                            <tr ng-click="vmDefects.setCurrentDefect(defect)" ng-class="{'selected-row': vmDefects.currentDefect == defect}">
+                                <th>
+                                    <input type="checkbox" ng-checked="vmDefects.toogledAll">
+                                </th>
+                                <td>
+                                    {{defect.name}}
+                                </td>
+                                <td>
+                                    {{defect.dateOfDefectCreation | date:'dd.MM.yyyy \'at\' H:mm:ss'}}
+                                </td>
+                                <td>
+                                    {{defect.priority}}
+                                </td>
+                                <td>
+                                    <select class='btn sizeStatus'
+                                            ng-init ="defect.status == undefined?defect.status = 'notFix':defect.status"
+                                            ng-class="{'btn-danger': defect.status == 'notFix',
+                                                     'btn-success': defect.status == 'open',
+                                                     'btn-info': defect.status == 'inProgress',
+                                                     'btn-primary': defect.status == 'closed' } "
+                                            onchange="this.className=this.options[this.selectedIndex].className"
+                                            ng-model="defect.status"
+                                            ng-change ="vmDefects.statusChange(defect._id, defect.status)">
+                                        <option value="notFix" class="btn btn-danger sizeStatus">NotFIX</option>
+                                        <option value="open" class="btn btn-success sizeStatus">OPEN</option>
+                                        <option value="inProgress" class="btn btn-info sizeStatus">IN PROGRESS</option>
+                                        <option value="closed" class="btn btn-primary sizeStatus">ClOSED</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-4 ">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            Detailed information
+                            <span class="pull-right">
+                                <span class="glyphicon glyphicon-inbox"></span>
+                                archive
+                            </span>
+                        </div>
+                        <div>
+                            <div class="panel-body" >
+                                <b>Name:</b>
+                                {{vmDefects.currentDefect.name}}
+                                <br>
+                                <b>Reporter:</b>
+                                {{vmDefects.currentDefect.reporter.fullName}}
+                                <br>
+                                <b>Assigned to:</b>
+                                {{vmDefects.currentDefect.assignedTo.fullName}}
+                                <br>
+                                <br>
+
+
+                                <b>Description:</b>
+                                <br>
+                                <span class="defectDescription" ng-bind-html="vmDefects.currentDefect.description">
+                                </span>
+                                <br>
+                                <br>
+                                <b>Steps to reproduce:</b>
+                                <br>
+                                 <span class="defectDescription" ng-bind-html="vmDefects.currentDefect.stepsToReproduce">
+                                </span>
+                                <br>
+                               <!-- <div ng-if="vmDefects.currentDefect.chooseFile">
+                                <b>Attached files</b>
+                                {{vmDefects.currentDefect.chooseFile}}
+                                <br>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-if="vmDefects.countOfDefects == 0">
+                <div class="col-sm-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h5>{{vmDefects.statusMessage}}</h5>
+                        </div>
+                    </div>
+                    <img src="../images/no-defects.jpg" class="img-responsive col-sm-offset-4" alt="no-defects" >
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- view for add defect modal-->
+    <div ui-view=""></div>
+</section>
